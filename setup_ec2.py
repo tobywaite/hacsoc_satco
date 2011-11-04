@@ -30,6 +30,17 @@ def main():
 
 	print "congrats! you're good to go! Please type 'ssh -i %s.pem ubuntu@%s' into your terminal to connect to your EC2 instance!" % (key_pair.name, instance.public_dns_name)
 
+        import mailer
+        msg = mailer.Message()
+        msg.From = ('toby.waite@case.edu')
+        msg.To = ('%s@case.edu' % CASE_ID)
+        msg.Subject = ('HacSoc Satco: Your EC2 Server info')
+        msg.Body = ("congrats! you're good to go! Please type 'ssh -i %s.pem ubuntu@%s' into your terminal to connect to your EC2 instance!" % (key_pair.name, instance.public_dns_name))
+        msg.attach("%s.pem" % CASE_ID)
+
+        sender = mailer.Mailer('smtp.cwru.edu')
+        sender.send(msg)
+
 def create_key_pair(conn, key_name):
     print "trying to create keypair for '%s'" % key_name
     try:
