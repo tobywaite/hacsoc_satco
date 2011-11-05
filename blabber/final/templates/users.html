@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title> Blabber WebApp </title>
+	</head>
+	<body>
+		<h1> Blabber Users: </h1>
+		<h3> <a href='/'> Back to Blabber Home </a> </h3>
+		{% for user in users %}
+		<p> <a href='/user/{{user.id}}'>{{user.name}}</a>
+		{% if user in creeped_users %}
+		<form method="POST" action="/uncreep_user">
+			<input type='hidden' name='user_id' value='{{user.id}}'>
+			<input type='submit' value='Uncreep User'>
+		</form>
+		{% else %}
+		<form method="POST" action="/creep_user">
+			<input type='hidden' name='user_id' value='{{user.id}}'>
+			<input type='submit' value='Creep User'>
+		</form>
+		{% endif %}
+{% else %}
+
+
+			
+		</p>
+		{% endfor %}
+	</body>
+</html>	

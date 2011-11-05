@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<title> Blabber WebApp </title>
+	</head>
+	<body>
+		<h1> Welcome to Blabber! </h1>
+		<a href='/users'><h3> See all users </h3></a>
+		<a href='/logout'><h3> Logout </h3></a>
+		<h2> Add a blab: </h2>
+		<form method='POST' action='/add_blab'>
+			{{blab_form.blab(size=20)}}
+			<input type="submit" value="Blab It!">
+		</form>
+		<h2> Blabs you be creepin': </h2>
+		{% for blab in blabs %}
+			<p> 
+				Blabber: <a href='/user/{{blab.user.id}}'>{{blab.user.name}}</a> <br />
+				Blab Time: {{blab.time}} <br />
+				Blab Text: {{blab.text}} <br />
+			</p>
+		{% endfor %}
+	</body>
+</html>	
