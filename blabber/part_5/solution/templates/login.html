@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<title> Blabber WebApp! </title>
+	</head>
+	<body>
+		<h1>Hello Blabber!</h1>
+		<h2> Please use this page to log into blabber! </h2>
+		<form method='POST' action='/add_user'>
+			{{ add_user_form.username.label }} {{ add_user_form.username(size=20) }}
+                        {{ add_user_form.password.label }} {{ add_user_form.password(size=20) }}
+                        <input type="submit" value="Create user">
+                </form>
+	</body>
+</html>

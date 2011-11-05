@@ -1,12 +1,16 @@
 from datetime import datetime
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request, url_for, session
 import flaskext.sqlalchemy as sqla
+from flaskext.wtf import Form, PasswordField, HiddenField, TextField, Required
 
 # APP SETUP #
 
+SECRET_KEY = 'dev_key' #in a real project, this should be random. And secret.
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blabber.db'
+app.secret_key = SECRET_KEY
 db = sqla.SQLAlchemy(app)
 
 # ROUTING #
@@ -14,17 +18,16 @@ db = sqla.SQLAlchemy(app)
 @app.route("/")
 def home():
 
-    # We create a list of blabs to pass to the template
-    blabs = [
-        "This is a test blab",
-        "Toby can Blab all day long!",
-        "Check out this sweet Blab",
-        "Python python python python BADGER"]
+    blabs = Blab.query.all()
+    blab_form = BlabForm()
 
-    return render_template("blabs.html", blabs=blabs)
+    return render_template("blabs.html", blabs=blabs, blab_form=blab_form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+
+    # Put a form on the login page to allow people to creat a new user.
+
     return render_template("login.html")
 
 @app.route("/logout", methods=['POST'])
@@ -41,11 +44,21 @@ def show_user(user_id):
 
 @app.route("/add_user", methods=['POST'])
 def add_user():
+
+    # The new login form will need to add users to the database!
+    
     return "This endpoint will allow us to add new users to Blabber"
 
 @app.route("/add_blab", methods=['POST'])
 def add_blab():
-    return "This endpoint will allow users to post new blabs"
+    form = BlabForm()
+
+    new_blab = Blab(form.blab.data)
+
+    db.session.add(new_blab)
+    db.session.commit()
+
+    return redirect(url_for('home'))
 
 @app.route("/creep_user", methods=['POST'])
 def creep_user():
@@ -54,6 +67,24 @@ def creep_user():
 @app.route("/uncreep_user", methods=['POST'])
 def uncreep_user():
     return "This endpoint will allow users to uncreep (unfollow) new users"
+
+# FORMS #
+
+class BlabForm(Form):
+    blab = TextField('blab', validators=[Required()])
+
+# This form lets a user submit their user name and password to log in.
+class LoginForm(Form):
+    username = TextField('username', validators=[Required()])
+    password = PasswordField('password', validators=[Required()])
+
+# Add a form here to allow a user to create a new username with a password!
+
+class CreepForm(Form):
+    user_id = HiddenField('user_id', validators=[Required()])
+
+class UnCreepForm(Form):
+    user_id = HiddenField('user_id', validators=[Required()])
 
 # DATABASE MODELS # 
 
@@ -85,16 +116,18 @@ class Blab(db.Model):
     # This stores the actual text of the blab.
     text = db.Column(db.String())
 
+    # For this, we've decided not to deal with users.
+
     # We store the user_id for the user who posted the blab
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # This mumbo-jumbo tells the database that the user_id references a user in the 'User' table
-    user = db.relationship('User',
-        backref=db.backref('back', lazy='dynamic'))
+    #user = db.relationship('User',
+    #    backref=db.backref('back', lazy='dynamic'))
 
     # When creating a new blab object, we must initialize it. This allows us to specify default values if wanted.
-    def __init__(self, text, user, time=datetime.utcnow()):
+    def __init__(self, text, time=datetime.utcnow()):
         self.text = text
-        self.user = user
+        #self.user = user
         self.time = time
 
 # The creep model keeps track of who is creeping on (following) whom
@@ -104,7 +137,7 @@ class Creep(db.Model):
     # This stores the user ID of the user who is being a creep.
     creeper_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # Similarly, this stores the user ID of the user who is being creeped upon.
-    creepee_id = db.Column(db.Integer, db.ForeighKey('user.id'))
+    creepee_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #initialize the Creep model
     def __init__(self, creeper_id, creepee_id):
