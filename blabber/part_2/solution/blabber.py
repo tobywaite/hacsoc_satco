@@ -7,11 +7,11 @@ app = Flask(__name__)
 def home():
     return "This is the main blabber homepage!"
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     return "This is the login page"
 
-@app.route("/logout")
+@app.route("/logout", methods=['POST'])
 def logout():
     return "Visiting this page will log a user out."
 

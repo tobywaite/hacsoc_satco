@@ -7,11 +7,11 @@ def home():
     return "This is the main blabber homepage!"
 
 # This endpoint renders a template!
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     return render_template("login.html")
 
-@app.route("/logout")
+@app.route("/logout", methods=['POST'])
 def logout():
     return "Visiting this page will log a user out."
 
