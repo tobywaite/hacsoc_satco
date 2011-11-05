@@ -1,15 +1,22 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-# Endpoint for the Blabber homepage.
 @app.route("/")
 def home():
-    return "This is the main blabber homepage!"
+
+    # We create a list of blabs to pass to the template
+    blabs = [
+        "This is a test blab",
+        "Toby can Blab all day long!",
+        "Check out this sweet Blab",
+        "Python python python python BADGER"]
+
+    return render_template("blabs.html", blabs=blabs)
 
 @app.route("/login")
 def login():
-    return "This is the login page"
+    return render_template("login.html")
 
 @app.route("/logout")
 def logout():
@@ -17,11 +24,11 @@ def logout():
 
 @app.route("/users")
 def show_users():
-    return "This page will show all users on Blabber"
+    return render_template("users.html")
 
 @app.route("/user/<user_id>")
 def show_user(user_id):
-    return "This page will show a particular user's profile"
+    return render_template("user.html")
 
 @app.route("/add_user", methods=['POST'])
 def add_user():

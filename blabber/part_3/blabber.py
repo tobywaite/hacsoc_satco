@@ -2,14 +2,14 @@ from flask import Flask
 
 app = Flask(__name__)
 
-# Endpoint for the Blabber homepage.
 @app.route("/")
 def home():
     return "This is the main blabber homepage!"
 
+# This endpoint renders a template!
 @app.route("/login")
 def login():
-    return "This is the login page"
+    return render_template("login.html")
 
 @app.route("/logout")
 def logout():
