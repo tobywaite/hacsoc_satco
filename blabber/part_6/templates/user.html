@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<title> Blabber WebApp </title>
+	</head>
+	<body>
+		<h1> This is {{user.name}}'s Blabber! </h1>
+		<h2> Blabs they be blabbin': </h2>
+		{% for blab in blabs %}
+			<p> 
+				Blabber: {{blab.user.name}} <br />
+				Blab Time: {{blab.time}} <br />
+				Blab Text: {{blab.text}} <br />
+			</p>
+		{% endfor %}
+	</body>
+</html>	
