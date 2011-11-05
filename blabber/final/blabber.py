@@ -191,4 +191,4 @@ class Creep(db.Model):
 if __name__ == "__main__":
     db.create_all()
     app.secret_key = SECRET_KEY
-    app.run(host='0.0.0.0.', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
