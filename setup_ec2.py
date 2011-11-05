@@ -34,7 +34,7 @@ def main(case_id):
         msg.From = ('toby.waite@case.edu')
         msg.To = ('%s@case.edu' % case_id)
         msg.Subject = ('HacSoc Satco: Your EC2 Server info')
-        msg.Body = ("congrats! you're good to go! Please type 'ssh -i %s.pem ubuntu@%s' into your terminal to connect to your EC2 instance!" % (key_pair.name, instance.public_dns_name))
+        msg.Body = ("congrats! you're good to go! Download this attachement, then in your favorite terminal, change directories (using the 'cd' command) to the locatino where you downloaded the file. Then type 'chmod 400 %s.pem', followed by 'ssh -i %s.pem ubuntu@%s' to connect to your EC2 instance!" % (key_pair.name, key_pair.name, instance.public_dns_name))
         msg.attach("%s.pem" % case_id)
 
         sender = mailer.Mailer('smtp.cwru.edu')
