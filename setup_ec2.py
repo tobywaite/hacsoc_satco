@@ -3,8 +3,8 @@ import os, time, sys
 from boto.ec2.connection import EC2Connection
 from boto.exception import BotoClientError
 
-AWS_SECRET_KEY_ID = 'AKIAIQPPZD5BNMWR7IOA' # Don't commit your keys to github! This is not a real key.
-AWS_SECRET_ACCESS_KEY = 'Mypa3FSJSyzbHil/19FNQzyFbceAoZ4K0075hA0s' # Don't commit your keys to github! This is not a real key.
+AWS_SECRET_KEY_ID = 'AKIAJX4ZIXFY4AP7UFHA'
+AWS_SECRET_ACCESS_KEY = 'fhE+pkftg2JvY1PGfoz2qHnGAvfIjDsyzG/GdA1U'
 AWS_UBUNTU_IMAGE_ID = 'ami-2768a64e'
 
 conn = EC2Connection(AWS_SECRET_KEY_ID, AWS_SECRET_ACCESS_KEY)

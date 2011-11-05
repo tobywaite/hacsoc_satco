@@ -104,7 +104,7 @@ class Creep(db.Model):
     # This stores the user ID of the user who is being a creep.
     creeper_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # Similarly, this stores the user ID of the user who is being creeped upon.
-    creepee_id = db.Column(db.Integer, db.ForeighKey('user.id'))
+    creepee_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #initialize the Creep model
     def __init__(self, creeper_id, creepee_id):
