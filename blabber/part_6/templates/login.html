@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<title> Blabber WebApp </title>
+	</head>
+	<body>
+		<h1> Login To Blabber! </h1>
+		<form method='POST' action='/login'>
+			{{ login_form.username.label }} {{ login_form.username(size=20) }}
+			{{ login_form.password.label }} {{ login_form.password(size=20) }}
+			<input type="submit" value="Login">
+		</form>
+		Not a user? Register here:
+		<form method='POST' action='/add_user'>
+			{{ add_user_form.username.label }} {{ add_user_form.username(size=20) }}
+			{{ add_user_form.password.label }} {{ add_user_form.password(size=20) }}
+			<input type="submit" value="Create user">
+		</form>
+	</body>
+</html>	

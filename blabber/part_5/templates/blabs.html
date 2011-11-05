@@ -1,0 +1,20 @@
+<html>
+	<head>
+		<title> Blabber WebApp! </title>
+	</head>
+	<body>
+		<h1>Hello Blabber!</h1>
+		<h3> Add a new blab: </h3>
+		<form method='POST' action='/add_blab'>
+			{{blab_form.blab(size=20)}}
+			<input type='submit' value='Blab it!'>
+		</form>
+		<h2>Blabs you be creepin':</h2>
+		{% for blab in blabs %}
+		<p> 
+			"{{blab.text}}" <br>
+		       	Blabbed at: {{blab.time}} <br>	
+		</p>
+		{% endfor %}
+	</body>
+</html>
