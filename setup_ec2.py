@@ -1,19 +1,18 @@
-import os, time
+import os, time, sys
 
 from boto.ec2.connection import EC2Connection
 from boto.exception import BotoClientError
 
 AWS_SECRET_KEY_ID = 'AKIAIQPPZD5BNMWR7IOA' # Don't commit your keys to github! This is not a real key.
 AWS_SECRET_ACCESS_KEY = 'Mypa3FSJSyzbHil/19FNQzyFbceAoZ4K0075hA0s' # Don't commit your keys to github! This is not a real key.
-CASE_ID = 'cxw158'
 AWS_UBUNTU_IMAGE_ID = 'ami-914e80f8'
 
 conn = EC2Connection(AWS_SECRET_KEY_ID, AWS_SECRET_ACCESS_KEY)
 
-def main():
+def main(case_id):
 	
         # Create a key-pair for this user and save it in the current directory.
-	key_pair = create_key_pair(conn, CASE_ID)
+	key_pair = create_key_pair(conn, case_id)
 	print 'created keypair: %s' % key_pair
 
 	# find the HacSoc security group
@@ -33,10 +32,10 @@ def main():
         import mailer
         msg = mailer.Message()
         msg.From = ('toby.waite@case.edu')
-        msg.To = ('%s@case.edu' % CASE_ID)
+        msg.To = ('%s@case.edu' % case_id)
         msg.Subject = ('HacSoc Satco: Your EC2 Server info')
         msg.Body = ("congrats! you're good to go! Please type 'ssh -i %s.pem ubuntu@%s' into your terminal to connect to your EC2 instance!" % (key_pair.name, instance.public_dns_name))
-        msg.attach("%s.pem" % CASE_ID)
+        msg.attach("%s.pem" % case_id)
 
         sender = mailer.Mailer('smtp.cwru.edu')
         sender.send(msg)
@@ -57,10 +56,16 @@ def create_key_pair(conn, key_name):
     except Exception, e:
         if 'InvalidKeyPair.Duplicate' in [error[0] for error in e.errors]:
             print 'keypair exists on aws. Removing it and trying again'
-            conn.delete_key_pair(CASE_ID)
+            conn.delete_key_pair(case_id)
             return create_key_pair(conn, key_name)
         else:
             raise
 
 if __name__ == '__main__':
-    main()
+ 
+    print sys.argv
+
+    for case_id in sys.argv[1:]:
+        main(case_id)
+
+    print "Job Done!"
